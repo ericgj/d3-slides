@@ -3,6 +3,11 @@
 
   HTML + SVG dynamic slide decks using d3.js
 
+  Transform a declarative model of slide layers and transitions
+  into actual slide (DOM) elements, with methods for stepping
+  forward and back, and auto-playing.
+
+ 
 ## Installation
 
   Install with [component(1)](http://component.io):
@@ -52,10 +57,6 @@
 
 ## The slide model
 
-  What this library does is transform a declarative model of how slide layers
-  progress, into the actual slide (DOM) elements, with methods for stepping
-  forward and back, and auto-playing.
-
   It is not intended to be a general purpose tool for building slide decks, but
   for a particular kind of slide deck and to fit within a particular toolchain.
 
@@ -82,6 +83,15 @@
 
   See [Examples](https://github.com/ericgj/d3-slides/tree/master/examples) 
   for usage.
+
+## Notes
+
+  - Changes the DOM in-place rather than preloading all slides or loading
+    static pages. 
+  
+  - Note SVG must be served via http, so slides that use layers from local SVG 
+    files require that you run a local http (static file) server.
+ 
 
 ## License
 
