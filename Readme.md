@@ -41,9 +41,9 @@
   // auto-play
 
   view.auto(2000);  // millisecond intervals
-  view.start();     // start autoplay
+  view.play();      // start autoplay
   
-  k('esc', auto.stop.bind(auto));  // cancel autoplay on esc
+  k('esc', view.stop.bind(view));  // cancel autoplay on esc
   ```
 
 

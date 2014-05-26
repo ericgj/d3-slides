@@ -53,7 +53,7 @@ function viewIterator(el,data){
     return this.next();
   }
 
-  instance.start = function(){
+  instance.play = function(){
     var self = this;
     var fn = function(){
       if (self.next()){
