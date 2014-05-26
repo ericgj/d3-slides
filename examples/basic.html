@@ -7,6 +7,7 @@
   <body>
     <h1>Basic</h1>
     <p>Use the left and right arrow keys to scroll</p>
+    <button id="autoplay">Autoplay</button>
     <div class="slide"></div>
     <script src="d3.v3.min.js"></script>
     <script src="build/build.js"></script>
@@ -33,8 +34,10 @@
       
       k('left',  view.prev.bind(view));
       k('right', view.next.bind(view));
-      k('esc', function(){ k.unbind(); });
+      k('esc', function(){ k.unbind(); view.stop() });
       
+      document.getElementById('autoplay').onclick = view.start.bind(view);
+
     </script>
   </body>
 </html>
