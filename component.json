@@ -1,0 +1,17 @@
+{
+  "name": "d3-slides",
+  "repo": "ericgj/d3-slides",
+  "description": "HTML + SVG dynamic slide decks using d3.js",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {},
+  "development": {
+    "timoxley/assert": "*",  
+    "yields/k": "*"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ]
+}
