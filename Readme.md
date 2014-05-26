@@ -80,7 +80,8 @@
   use` DOM elements.  Title and subtitle _change_, while bullet and graphic
   elements _overlay_.
 
-  See [Examples](/ericgj/d3-slides/tree/master/examples) for usage.
+  See [Examples](https://github.com/ericgj/d3-slides/tree/master/examples) 
+  for usage.
 
 ## License
 
