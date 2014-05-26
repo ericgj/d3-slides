@@ -9,15 +9,49 @@
 
     $ component install ericgj/d3-slides
 
-## API
+  Make sure you also have [d3](https://github.com/mbostock/d3) available as
+  a global.
 
+## Example
+
+  ```js
+  var slides = require('d3-slides');
+  var deck = slides([
+    {
+      layers: [
+        { title:    "The first slide" },
+        { subtitle: "A short demonstration of mixed html and svg slides" },
+        { graphic:  "svg/test.svg#layer1" , bullet: "Stepping through graphic layers." },
+        { graphic:  "svg/test.svg#layer2"},
+        { graphic:  "svg/test.svg#layer3", bullet: "You can change several elements at once." },
+        { graphic:  "svg/test.svg#layer4", subtitle: "What do you think?" } 
+      ]
+    }
+  ]);
+
+  var view = deck.view(el)
+  
+  // key binding
+  // you can use whatever library you want, here it's yields/k
+
+  var k = require('k')(window);
+  k('right', view.next.bind(view));
+  k('left',  view.prev.bind(view));
+
+  // auto-play
+
+  view.auto(2000);  // millisecond intervals
+  view.start();     // start autoplay
+  
+  k('esc', auto.stop.bind(auto));  // cancel autoplay on esc
+  ```
 
 
 ## License
 
   The MIT License (MIT)
 
-  Copyright (c) 2014 <copyright holders>
+  Copyright (c) 2014 Eric Gjertsen <ericgj72@gmail.com>
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
