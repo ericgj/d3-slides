@@ -80,17 +80,22 @@ function viewIterator(el,data){
 function layout(data){
   var ret = [];
   data.forEach( function(slide){
-    var cur = { titles: [], subtitles: [], bullets: [], graphics: [] };
+    var cur = { titles: [], subtitles: [], bullets: [], nums: [], graphics: [] };
     slide.layers.forEach( function(layer){
       if (layer.bullet)   cur.bullets.push( layer.bullet );
+      if (layer.num)      cur.nums.push( layer.num );
       if (layer.graphic)  cur.graphics.push( layer.graphic );
       if (layer.title)    cur.titles[0] = layer.title;
       if (layer.subtitle) cur.subtitles[0] = layer.subtitle;
+
       var obj = {};
       obj.titles = cur.titles.slice(0);
       obj.subtitles = cur.subtitles.slice(0);
       obj.bullets = cur.bullets.slice(0);
+      obj.nums   = cur.nums.slice(0);
       obj.graphics = cur.graphics.slice(0);
+      if (layer.highlight) obj.graphics.push(layer.highlight);
+      obj.captions = layer.caption ? [layer.caption] : [];
       ret.push(obj);
     })
   })
@@ -112,31 +117,42 @@ function view(el,layer){
    var title = slide.selectAll('h1').data(layer.titles);
    var subtitle = slide.selectAll('h2').data(layer.subtitles);
    var bulletlist = slide.selectAll('ul').data( hasAtLeastOne(layer.bullets) );  
+   var numlist = slide.selectAll('ol').data( hasAtLeastOne(layer.nums) );  
    var svg = slide.selectAll('svg').data( hasAtLeastOne(layer.graphics) );
-   
+   var caption = slide.selectAll('p.caption').data( layer.captions, fetchfn() );
+
    // enter
    title.enter().append('h1');
    subtitle.enter().append('h2');
    bulletlist.enter().append('ul');
-   svg.enter().append('svg')
+   numlist.enter().append('ol');
+   svg.enter().append('svg');
+   caption.enter().append('p').classed('caption',true);
 
    // sub-elements
    var bullets = bulletlist.selectAll('li').data(layer.bullets, fetchfn());
    bullets.enter().append('li');
 
+   var nums = numlist.selectAll('li').data(layer.nums, fetchfn());
+   nums.enter().append('li');
+
    var svglayers = svg.selectAll('use').data(layer.graphics, fetchfn());
    svglayers.enter().append('use');
-
 
    // update
    title.text( fetchfn() );
    subtitle.text( fetchfn() );
    bullets.text( fetchfn() );
+   nums.text( fetchfn() );
    svglayers.attr('xlink:href', fetchfn(), true);
-    
+   caption.text( fetchfn() );
+
    // exit
+   caption.exit().remove();
    svglayers.exit().remove();
    svg.exit().remove();
+   nums.exit().remove();
+   numlist.exit().remove();
    bullets.exit().remove();
    bulletlist.exit().remove();
    subtitle.exit().remove();

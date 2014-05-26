@@ -73,13 +73,30 @@
   first, then bullet points, then the graphic. Or perhaps you want to bring
   in successive layers of the graphic together with the bullet points.
 
-  Slides are modelled as a set of _layers_ of elements, some of which _change_
-  as the slides progress, and others of which _overlay_.
+  The intention is to make it easy to "storyboard" a slide presentation with
+  a declarative DSL.
 
-  Currently (v0.0.x), there are _title_, _subtitle_, _bullet_, and _graphic_
-  elements.  These are transformed into `h1`, `h2`, `ul > li`, and `svg >
-  use` DOM elements.  Title and subtitle _change_, while bullet and graphic
-  elements _overlay_.
+  Slides are modelled as a set of _layers_ of elements. There are essentially
+  three behaviors an element can have as the slides progress:
+
+  1. Some elements _change in place_ as the slide layers progress;
+  2. Others _overlay_ (i.e. append);
+  3. Others are _transient_, they only appear once.
+
+  Currently (v0.0.x), there are _title_, _subtitle_, _bullet_, _num_,
+  _graphic_, _caption_, and _highlight_ elements.  These are transformed
+  into the following DOM elements:
+  
+    title     -->  h1
+    subtitle  -->  h2
+    bullet    -->  ul > li
+    num       -->  ol > li
+    graphic   -->  svg > use
+    caption   -->  p.caption
+    highlight -->  svg > use
+  
+  Title and subtitle _change_. Bullet, num, and graphic elements
+  _overlay_. Caption and highlight elements are _transient_.
 
   See [Examples](https://github.com/ericgj/d3-slides/tree/master/examples) 
   for usage.
