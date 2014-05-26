@@ -29,15 +29,19 @@
     }
   ]);
 
+  // attach to DOM at container el (or selector)
+  
   var view = deck.view(el)
   
+
   // key binding
   // you can use whatever library you want, here it's yields/k
-
+  
   var k = require('k')(window);
   k('right', view.next.bind(view));
   k('left',  view.prev.bind(view));
 
+  
   // auto-play
 
   view.auto(2000);  // millisecond intervals
@@ -46,6 +50,37 @@
   k('esc', view.stop.bind(view));  // cancel autoplay on esc
   ```
 
+## The slide model
+
+  What this library does is transform a declarative model of how slide layers
+  progress, into the actual slide (DOM) elements, with methods for stepping
+  forward and back, and auto-playing.
+
+  It is not intended to be a general purpose tool for building slide decks, but
+  for a particular kind of slide deck and to fit within a particular toolchain.
+
+  For example, a typical slide layout might look like this, statically:
+
+    Title
+    Subtitle
+    * Bullet point 1
+    * Bullet point 2
+    Graphic
+
+  But you don't want the entire slide to appear at once, you want to walk
+  through the elements. Perhaps you want to bring in the title and subtitle
+  first, then bullet points, then the graphic. Or perhaps you want to bring
+  in successive layers of the graphic together with the bullet points.
+
+  Slides are modelled as a set of _layers_ of elements, some of which _change_
+  as the slides progress, and others of which _overlay_.
+
+  Currently (v0.0.x), there are _title_, _subtitle_, _bullet_, and _graphic_
+  elements.  These are transformed into `h1`, `h2`, `ul > li`, and `svg >
+  use` DOM elements.  Title and subtitle _change_, while bullet and graphic
+  elements _overlay_.
+
+  See [Examples](/ericgj/d3-slides/tree/master/examples) for usage.
 
 ## License
 
