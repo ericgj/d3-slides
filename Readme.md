@@ -80,21 +80,26 @@
   three behaviors an element can have as the slides progress:
 
   1. Some elements _change in place_ as the slide layers progress;
+  
   2. Others _overlay_ (i.e. append);
+  
   3. Others are _transient_, they only appear once.
 
+  
   Currently (v0.0.x), there are _title_, _subtitle_, _bullet_, _num_,
   _graphic_, _caption_, and _highlight_ elements.  These are transformed
   into the following DOM elements:
   
-    title     -->  h1
-    subtitle  -->  h2
-    bullet    -->  ul > li
-    num       -->  ol > li
-    graphic   -->  svg > use
-    caption   -->  p.caption
-    highlight -->  svg > use
-  
+  ```
+  title     -->  h1
+  subtitle  -->  h2
+  bullet    -->  ul > li
+  num       -->  ol > li
+  graphic   -->  svg > use
+  caption   -->  p.caption
+  highlight -->  svg > use
+  ```
+
   Title and subtitle _change_. Bullet, num, and graphic elements
   _overlay_. Caption and highlight elements are _transient_.
 
