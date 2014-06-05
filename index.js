@@ -127,7 +127,7 @@ function view(el,layer){
    bulletlist.enter().append('ul');
    numlist.enter().append('ol');
    svg.enter().append('svg');
-   caption.enter().append('p').classed('caption',true);
+   caption.enter().insert('p','svg + *').classed('caption',true);
 
    // sub-elements
    var bullets = bulletlist.selectAll('li').data(layer.bullets, fetchfn());
@@ -138,6 +138,7 @@ function view(el,layer){
 
    var svglayers = svg.selectAll('use').data(layer.graphics, fetchfn());
    svglayers.enter().append('use');
+
 
    // update
    title.text( fetchfn() );

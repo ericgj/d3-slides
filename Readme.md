@@ -85,7 +85,7 @@
   
   3. Others are _transient_, they only appear once.
 
-  
+
   Currently (v0.0.x), there are _title_, _subtitle_, _bullet_, _num_,
   _graphic_, _caption_, and _highlight_ elements.  These are transformed
   into the following DOM elements:
@@ -102,6 +102,9 @@
 
   Title and subtitle _change_. Bullet, num, and graphic elements
   _overlay_. Caption and highlight elements are _transient_.
+
+  Caption elements, if present, always appear immediately below the graphic.
+  Other elements appear in the order of the list above.
 
   See [Examples](https://github.com/ericgj/d3-slides/tree/master/examples) 
   for usage.
