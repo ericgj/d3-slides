@@ -78,29 +78,31 @@ function viewIterator(el,data){
 // implementation
 
 function layout(data){
+
+  function inLayer(layers,n){
+    if (layers === undefined) return true;
+    if (layers[n] === undefined) return !!(layers[layers.length-1]);
+    return !!(layers[n]);
+  }
+
   var ret = [];
   data.forEach( function(slide){
-    var cur = { titles: [], subtitles: [], bullets: [], nums: [], graphics: [] };
-    slide.layers.forEach( function(layer){
-      if (layer.bullet)   cur.bullets.push( layer.bullet );
-      if (layer.num)      cur.nums.push( layer.num );
-      if (layer.graphic)  cur.graphics.push( layer.graphic );
-      if (layer.title)    cur.titles[0] = layer.title;
-      if (layer.subtitle) cur.subtitles[0] = layer.subtitle;
-
-      var obj = {};
-      obj.titles = cur.titles.slice(0);
-      obj.subtitles = cur.subtitles.slice(0);
-      obj.bullets = cur.bullets.slice(0);
-      obj.nums   = cur.nums.slice(0);
-      obj.graphics = cur.graphics.slice(0);
-      if (layer.highlight) obj.graphics.push(layer.highlight);
-      obj.captions = layer.caption ? [layer.caption] : [];
-      ret.push(obj);
+    var nlayers = d3.max(slide, function(spec){ return (spec[2] || []).length; });
+    var cur = Array(nlayers);
+    slide.forEach( function(spec){
+      for (var i=0; i<nlayers; i++){
+        var rec = cur[i] = cur[i] || { title: [], subtitle: [], bullet: [], num: [], graphic: [], caption: [] }
+        if (inLayer(spec[2],i) && has.call(rec,spec[0])){
+          rec[spec[0]].push( spec[1] )
+        }
+      }
     })
-  })
+    ret.push.apply(ret, cur);
+  });
+
   return ret;
 }
+
 
 function view(el,layer){
    
@@ -114,12 +116,12 @@ function view(el,layer){
 
    var slide = d3.select(el)
    
-   var title = slide.selectAll('h1').data(layer.titles);
-   var subtitle = slide.selectAll('h2').data(layer.subtitles);
-   var bulletlist = slide.selectAll('ul').data( hasAtLeastOne(layer.bullets) );  
-   var numlist = slide.selectAll('ol').data( hasAtLeastOne(layer.nums) );  
-   var svg = slide.selectAll('svg').data( hasAtLeastOne(layer.graphics) );
-   var caption = slide.selectAll('p.caption').data( layer.captions, fetchfn() );
+   var title = slide.selectAll('h1').data(layer.title);
+   var subtitle = slide.selectAll('h2').data(layer.subtitle);
+   var bulletlist = slide.selectAll('ul').data( hasAtLeastOne(layer.bullet) );  
+   var numlist = slide.selectAll('ol').data( hasAtLeastOne(layer.num) );  
+   var svg = slide.selectAll('svg').data( hasAtLeastOne(layer.graphic) );
+   var caption = slide.selectAll('p.caption').data( layer.caption, fetchfn() );
 
    // enter
    title.enter().append('h1');
@@ -130,13 +132,13 @@ function view(el,layer){
    caption.enter().insert('p','svg + *').classed('caption',true);
 
    // sub-elements
-   var bullets = bulletlist.selectAll('li').data(layer.bullets, fetchfn());
+   var bullets = bulletlist.selectAll('li').data(layer.bullet, fetchfn());
    bullets.enter().append('li');
 
-   var nums = numlist.selectAll('li').data(layer.nums, fetchfn());
+   var nums = numlist.selectAll('li').data(layer.num, fetchfn());
    nums.enter().append('li');
 
-   var svglayers = svg.selectAll('use').data(layer.graphics, fetchfn());
+   var svglayers = svg.selectAll('use').data(layer.graphic, fetchfn());
    svglayers.enter().append('use');
 
 
