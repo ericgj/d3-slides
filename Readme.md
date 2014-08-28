@@ -21,18 +21,23 @@
 
   ```js
   var slides = require('d3-slides');
-  var deck = slides([
-    {
-      layers: [
-        { title:    "The first slide" },
-        { subtitle: "A short demonstration of mixed html and svg slides" },
-        { graphic:  "svg/test.svg#layer1" , bullet: "Stepping through graphic layers." },
-        { graphic:  "svg/test.svg#layer2"},
-        { graphic:  "svg/test.svg#layer3", bullet: "You can change several elements at once." },
-        { graphic:  "svg/test.svg#layer4", subtitle: "What do you think?" } 
-      ]
-    }
-  ]);
+  var deck = [
+    [
+      [ "title",    "The first slide"                                                    ],
+      [ "subtitle", "A short demonstration of mixed html and svg slides", [0,1]          ],
+      [ "graphic",  "svg/test.svg#layer1" ,                               [0,0,1]        ],
+      [ "bullet",   "Stepping through graphic layers.",                   [0,0,1]        ],
+      [ "graphic",  "svg/test.svg#layer2",                                [0,0,0,1]      ],
+      [ "caption",  "And putting a caption below.",                       [0,0,0,1]      ],
+      [ "graphic",  "svg/test.svg#layer3",                                [0,0,0,0,1]    ],
+      [ "num",      "You can change several elements at once.",           [0,0,0,0,1]    ],
+      [ "graphic",  "svg/test.svg#highlight",                             [0,0,0,0,0,1]  ],
+      [ "num",      "And add highlight layers.",                          [0,0,0,0,0,1]  ],
+      [ "graphic",  "svg/test.svg#layer4",                                [0,0,0,0,0,0,1]],
+      [ "caption",  "Questions?",                                         [0,0,0,0,0,0,1]],
+      [ "subtitle", "What do you think?",                                 [0,0,0,0,0,0,1]]
+    ]
+  ]
 
   // attach to DOM at container el (or selector)
   
@@ -76,19 +81,45 @@
   The intention is to make it easy to "storyboard" a slide presentation with
   a declarative DSL.
 
-  Slides are modelled as a set of _layers_ of elements. There are essentially
-  three behaviors an element can have as the slides progress:
+### Storyboard matrix
 
-  1. Some elements _change in place_ as the slide layers progress;
-  
-  2. Others _overlay_ (i.e. append);
-  
-  3. Others are _transient_, they only appear once.
+  A slide deck is represented as an array of slides; each slide is represented
+  as an array of slide elements; each slide element is a triplet of type, 
+  value, and a _storyboard array_. For example:
 
+  ```json
+  ["bullet", "Bullet point 1",  [0,0,1] ]
+  ```
+
+  This instructs the slide renderer to display a bullet element with the given 
+  text, starting at layer 3 and continuing until the end of the slide.
+
+  By default, if no storyboard array is specified, an element appears on _all_
+  layers of the slide, like this:
+
+  ```json
+  ["title", "The title is fixed"]
+  ```
+
+  You can make an element can appear and disappear like this:
+
+  ```json
+  [
+    ["subtitle", "First one thing...",  [0,1,0]  ],
+    ["subtitle", "...And then another", [0,0,1,0]]
+  ]
+  ```
+
+  That will replace the first subtitle in layer 2 with the second subtitle in 
+  layer 3. Both subtitles will disappear in layer 4+. (The last element of the
+  storyboard array determines whether the element stays (1) or is removed 
+  (0).)
+
+### Elements
 
   Currently (v0.0.x), there are _title_, _subtitle_, _bullet_, _num_,
-  _graphic_, _caption_, and _highlight_ elements.  These are transformed
-  into the following DOM elements:
+  _graphic_, and _caption_ elements.  These are transformed into the following 
+  DOM elements:
   
   ```
   title     -->  h1
@@ -97,17 +128,14 @@
   num       -->  ol > li
   graphic   -->  svg > use
   caption   -->  p.caption
-  highlight -->  svg > use
   ```
-
-  Title and subtitle _change_. Bullet, num, and graphic elements
-  _overlay_. Caption and highlight elements are _transient_.
 
   Caption elements, if present, always appear immediately below the graphic.
   Other elements appear in the order of the list above.
 
   See [Examples](https://github.com/ericgj/d3-slides/tree/master/examples) 
-  for usage.
+  for more example usage.
+
 
 ## Notes
 
